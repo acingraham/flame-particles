@@ -1,0 +1,107 @@
+<html>
+  <head>
+    <title>Fire</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <style>
+        body {
+          overflow: hidden;
+        }
+    </style>
+  </head>
+  <body style='background: #000'>
+    <canvas id='display' width='1' height='1' />
+
+    <script>
+      function Particle(x, y, size, color, center) {
+        this.x = x;
+        this.y = y;
+        this.size = size;
+        this.color = color;
+        this.center = center;
+      }
+
+      Particle.prototype.draw = function() {
+        ctx.strokeStyle = "rgba(255, 255, 255, 0)";
+        ctx.lineWidth = 0;
+
+        this.y -= 3;
+        this.x += Math.random() * ((this.center - this.x) / 40);
+        //this.x += ((this.center - this.x) / 100);
+        //this.size -= Math.random();
+
+        this.size = Math.max(this.size - Math.random(), 0);
+
+        //ctx.fillStyle = "rgba(155, 0, 0, .5)";
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI*2, true); 
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.stroke();
+      };
+      var display = document.getElementById('display');
+      var ctx = display.getContext('2d');
+      var particles = [];
+      var width = display.width = window.innerWidth;
+      var height = display.height = window.innerHeight;
+      var mouse = {
+        x: width / 2,
+        y: height / 2
+      };
+
+      display.addEventListener('mousemove', function(e) {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+      });
+
+      requestAnimationFrame(frame);
+      function frame() {
+        requestAnimationFrame(frame);
+        ctx.clearRect(0, 0, width, height);
+        var stillVisibleParticles = [];
+        particles.forEach(function(particle) {
+            particle.draw();
+            if (particle.size > 0) {
+                stillVisibleParticles.push(particle);
+            }
+
+        });
+
+        particles = stillVisibleParticles;
+
+        // TODO - Instead of creating new particles, just reset the old ones.
+        addParticles(particles, 1000 - particles.length);
+      }
+
+      function getXAndY() {
+        var degrees = Math.random() * 360,
+            //radians = Math.random() * 25;
+            radians = Math.random() * 50;
+
+        return {
+            radians: radians,
+            x: radians * Math.cos(degrees),
+            y: radians * Math.sin(degrees)
+        };
+      }
+
+      function addParticles(particleArray, numToAdd) {
+        //numToAdd = Math.min(numToAdd, 1);
+        numToAdd = numToAdd / 3;
+        for (var i = 0; i < numToAdd; i++) {
+          //particles[i] = new Particle(Math.random() * width, -100, Math.floor(1 + Math.random() * 100));
+          var size = 20;
+          var xAndY = getXAndY();
+          var color = 'rgba(' + Math.floor(Math.min(250 / xAndY.radians * 10, 255)) + ',0,0,.1)';
+          //var color = 'rgba(0,' + Math.floor(Math.min(250 / xAndY.radians * 10, 255)) + ',0,.1)';
+          //var color = 'rgba(0,0,' + Math.floor(Math.min(250 / xAndY.radians * 10, 255)) + ',1)';
+          
+          //particleArray.push(new Particle(mouse.x + Math.random() - .5) * 50), mouse.y + ((Math.random() - .5) * 50), size));
+          particleArray.push(new Particle( ((Math.random() - .5) * 20) + (mouse.x + xAndY.x), -50 + mouse.y + xAndY.y, size, color, mouse.x));
+        }
+      }
+
+    </script>
+  </body>
+</html>
