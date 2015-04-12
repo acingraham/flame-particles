@@ -6,3 +6,14 @@ body {
 span {
   color: white;
 }
+
+div {
+  z-index: 1;
+  position: relative;
+}
+
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+}

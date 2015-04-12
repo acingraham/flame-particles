@@ -9,6 +9,7 @@
 4. Decay Rate
 5. Starting position
 6. Rise rate
+7. Size
 
 #### Other attributes
 1. Background color
@@ -17,3 +18,4 @@
 1. Random button that sets all the controls randomly
 2. Follow mouse
 3. Presets
+4. Use square particles instead of circular

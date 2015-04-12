@@ -10,22 +10,27 @@ function setConstants() {
   constants.radianMax = document.getElementById('radianMax').value;
   constants.weirdMultiplier = document.getElementById('weirdMultiplier').value;
   constants.decaySpeed = document.getElementById('decaySpeed').value;
+  constants.driftTowardsCenter = document.getElementById('driftTowardsCenter').value;
 }
 
-function Particle(x, y, size, color, center) {
-  this.x = x;
-  this.y = y;
-  this.size = size;
-  this.color = color;
-  this.center = center;
+//function Particle(x, y, size, color, center) {
+function Particle(attributes) {
+  this.x = attributes.x;
+  this.y = attributes.y;
+  this.size = attributes.size;
+  this.color = attributes.color;
+  this.center = attributes.center;
 }
 
 Particle.prototype.draw = function() {
-  ctx.strokeStyle = "rgba(255, 255, 255, 0)";
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0)';
   ctx.lineWidth = 0;
 
   this.y -= constants.riseSpeed;
-  this.x += Math.random() * ((this.center - this.x) / 40);
+  // this.x += Math.random() * ((this.center - this.x) / 40);
+  // this.x += Math.random() * ((this.center - this.x) / 1000);
+  //this.x += Math.random() * ((this.center - this.x) / (100 - constants.driftTowardsCenter));
+  this.x += Math.random() * (this.center - this.x) * (constants.driftTowardsCenter / 1000);
   //this.x += ((this.center - this.x) / 100);
   //this.size -= Math.random();
 
@@ -109,8 +114,16 @@ function addParticles(particleArray, numToAdd) {
   for (var i = 0; i < numToAdd; i++) {
     var xAndY = getXAndY();
     var color = 'rgba(' + randomColors(xAndY) + ',.1)';
-    
+
+    var attributes = {
+      x: ((Math.random() - .5) * 20) + (mouse.x + xAndY.x),
+      y: -50 + mouse.y + xAndY.y,
+      size: constants.size,
+      color: color,
+      center: mouse.x
+    };
+
     //particleArray.push(new Particle(mouse.x + Math.random() - .5) * 50), mouse.y + ((Math.random() - .5) * 50), constants.size));
-    particleArray.push(new Particle( ((Math.random() - .5) * 20) + (mouse.x + xAndY.x), -50 + mouse.y + xAndY.y, constants.size, color, mouse.x));
+    particleArray.push(new Particle(attributes));
   }
 }
