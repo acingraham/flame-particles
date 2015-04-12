@@ -7,7 +7,7 @@ span {
   color: white;
 }
 
-div {
+div, button {
   z-index: 1;
   position: relative;
 }

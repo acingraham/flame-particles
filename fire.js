@@ -1,19 +1,77 @@
+function myRand(min, max) {
+  return min + Math.floor(Math.random() * (max - min + 1));
+}
+
+function randomizeConstants() {
+  // 0, 255
+  document.getElementById('red').value = myRand(0, 255);
+
+  // 0, 255
+  document.getElementById('green').value = myRand(0, 255);
+
+  // 0, 255
+  document.getElementById('blue').value = myRand(0, 255);
+
+  // 10, 30
+  document.getElementById('size').value = myRand(10, 30);
+
+  // 1, 1000
+  document.getElementById('particles').value = myRand(1, 1000);
+
+  // 0, 10
+  document.getElementById('riseSpeed').value = myRand(0, 10);
+  //constants.xVariance = document.getElementById('xVariance').value;
+  // constants.yVariance = document.getElementById('yVariance').value;
+
+  // 1, 100
+  document.getElementById('radianMax').value = myRand(1, 100);
+
+  // 1, 100
+  document.getElementById('weirdMultiplier').value = myRand(1, 100);
+
+  // 0, 100
+  document.getElementById('decaySpeed').value = myRand(0, 10);
+
+  // -1000, 1000
+  document.getElementById('driftTowardsCenter').value = myRand(-1000, 1000);
+
+}
+
 function setConstants() {
+
+  // 0, 255
   constants.red = document.getElementById('red').value;
+
+  // 0, 255
   constants.green = document.getElementById('green').value;
+
+  // 0, 255
   constants.blue = document.getElementById('blue').value;
+
+  // 10, 30
   constants.size = document.getElementById('size').value;
+
+  // 1, 1000
   constants.particleCount = document.getElementById('particles').value;
+
+  // 0, 10
   constants.riseSpeed = document.getElementById('riseSpeed').value;
   constants.xVariance = document.getElementById('xVariance').value;
   constants.yVariance = document.getElementById('yVariance').value;
+
+  // 1, 100
   constants.radianMax = document.getElementById('radianMax').value;
+
+  // 1, 100
   constants.weirdMultiplier = document.getElementById('weirdMultiplier').value;
-  constants.decaySpeed = document.getElementById('decaySpeed').value;
+
+  // 0, 100
+  constants.decaySpeed = document.getElementById('decaySpeed').value / 10;
+
+  // -1000, 1000
   constants.driftTowardsCenter = document.getElementById('driftTowardsCenter').value;
 }
 
-//function Particle(x, y, size, color, center) {
 function Particle(attributes) {
   this.x = attributes.x;
   this.y = attributes.y;
@@ -59,10 +117,10 @@ var constants = {};
 
 setConstants();
 
-/*display.addEventListener('mousemove', function(e) {
+display.addEventListener('mousemove', function(e) {
   mouse.x = e.clientX;
   mouse.y = e.clientY;
-});*/
+});
 
 requestAnimationFrame(frame);
 function frame() {
@@ -71,8 +129,10 @@ function frame() {
   var stillVisibleParticles = [];
   particles.forEach(function(particle) {
       particle.draw();
-      if (particle.size > 0) {
-          stillVisibleParticles.push(particle);
+
+      // TODO - Add check for if particle is off screen
+      if (particle.size > 0 && particle.y > 0) {
+        stillVisibleParticles.push(particle);
       }
 
   });
